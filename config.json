@@ -1,0 +1,18 @@
+{
+    "mode": "single",
+    "debug": false,
+    "db": {
+        "database": "sqlite",
+        "connection": ":memory:"
+    },
+    "logging": {
+        "loggers": [
+            {
+                "type": "file",
+                "enabled": true,
+                "output": "aggregator.log",
+                "level": 30
+            }
+        ]
+    }
+}

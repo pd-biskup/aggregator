@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+<table class="admin-table">
+    <tr>
+        <th>Id</th>
+        <th>Plugin</th>
+        <th>Parameters</th>
+        <th>Data</th>
+    </tr>
+    {% for plugin in plugins %}
+    <tr>
+        <td>{{ plugin.id }}</td>
+        <td>{{ plugin.plugin }}</td>
+        <td>{{ plugin.params }}</td>
+        <td>{{ plugin.data }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

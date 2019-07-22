@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% from "plugin.html" import build_param_str, build_plugin_settings, build_plugin %}
+
+{% block head %}
+{{ super() }}
+<script src="{{ url_for('static', filename='plugin.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div>
+    <h1>Local</h1>
+</div>
+<div>
+    <button id="add-plugin-button" onclick="showAddPlugin()">Add</button>
+</div>
+<div class="grid">
+    <table id="plugin-grid">
+        {% for row in range(layout.rows) %}
+            <tr class="row">
+                {% for col in range(layout.cols) %}
+                    <td class="col">
+                        {% if layout.templates[row][col] %}
+                            {{ build_plugin(layout.templates[row][col]) }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
+
+{% block overlay %}
+<div id="add-plugin-menu" class="floating" style="visibility: collapse">
+    <ul>
+        {% for plugin in plugins %}
+        <li class="plugin-menu-item" onClick="addPlugin('{{ plugin }}')">
+            {{ plugin }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% for row in range(layout.rows) %}
+    {% for col in range(layout.cols) %}
+        {% if layout.templates[row][col] %}
+            {{ build_plugin_settings(layout.templates[row][col]) }}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+
+{% macro build_param_str(plugin, param) %}
+<td>
+    <label for="param-{{ plugin.id }}-{{ param.name }}-input">{{ param.name }}: </label>
+</td>
+<td>
+    <input type="text" id="param-{{ plugin.id }}-{{ param.name }}-input" value="{{ plugin.params[param.name] }}">
+</td>
+<td>
+    <button onclick="saveParam('{{ plugin.id }}', '{{ param.name }}')">save</button>
+</td>
+<td>
+    <span id="param-{{ plugin.id }}-{{ param.name }}-saved"></span>
+</td>
+{% endmacro %}
+
+{% macro build_param_bool(plugin, param) %}
+<td>
+    <label for="param-{{ plugin.id }}-{{ param.name }}-input">{{ param.name }}: </label>
+</td>
+<td>
+    <input type="checkbox" id="param-{{ plugin.id }}-{{ param.name }}-input"{% if plugin.params[param.name] %} checked{% endif %}>
+</td>
+<td>
+    <button onclick="saveParam('{{ plugin.id }}', '{{ param.name }}')">save</button>
+</td>
+<td>
+    <span id="param-{{ plugin.id }}-{{ param.name }}-saved"></span>
+</td>
+{% endmacro %}
+
+{% macro build_param_num(plugin, param) %}
+<td>
+    <label for="param-{{ plugin.id }}-{{ param.name }}-input">{{ param.name }}: </label>
+</td>
+<td>
+    <input type="number" id="param-{{ plugin.id }}-{{ param.name }}-input" value="{{ plugin.params[param.name] }}"{% if param.min is not none %} min={{ param.min }}{% endif %}{% if param.max is not none %} max={{ param.max }}{% endif %} step={{ param.step }}>
+</td>
+<td>
+    <button onclick="saveParam('{{ plugin.id }}', '{{ param.name }}')">save</button>
+</td>
+<td>
+    <span id="param-{{ plugin.id }}-{{ param.name }}-saved"></span>
+</td>
+{% endmacro %}
+
+<!-- {% macro build_param_list(plugin, param) %}
+<td>
+    <label for="param-{{ plugin.id }}-{{ param.name }}-input">{{ param.name }}: </label>
+</td>
+<td>
+    <input type="text" id="param-{{ plugin.id }}-{{ param.name }}-input" value="{{ plugin.params[param.name] }}">
+</td>
+<td>
+    <button onclick="saveParam('{{ plugin.id }}', '{{ param.name }}')">save</button>
+</td>
+<td>
+    <span id="param-{{ plugin.id }}-{{ param.name }}-saved"></span>
+</td>
+{% endmacro %} -->
+
+<!-- {% macro build_param_complex(plugin, param) %}
+<td>
+    <label for="param-{{ plugin.id }}-{{ param.name }}-input">{{ param.name }}: </label>
+</td>
+<td>
+    <input type="text" id="param-{{ plugin.id }}-{{ param.name }}-input" value="{{ plugin.params[param.name] }}">
+</td>
+<td>
+    <button onclick="saveParam('{{ plugin.id }}', '{{ param.name }}')">save</button>
+</td>
+<td>
+    <span id="param-{{ plugin.id }}-{{ param.name }}-saved"></span>
+</td>
+{% endmacro %} -->
+
+{% macro build_plugin_settings(plugin) %}
+<div id="plugin-settings-{{ plugin.id }}" class="plugin-settings floating">
+    <table>
+        {% for param in plugin.__paramschema__ %}
+        <tr>
+            {% if param.__paramtype__ == "str" %}
+                {{ build_param_str(plugin, param) }}
+            {% elif param.__paramtype__ == "bool" %}
+                {{ build_param_bool(plugin, param) }}
+            {% elif param.__paramtype__ == "num" %}
+                {{ build_param_num(plugin, param) }}
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endmacro %}
+
+{% macro build_plugin(plugin) %}
+<div id="plugin-{{ plugin.id }}" class="plugin plugin-small">
+    <div class="plugin-header">
+        <h4 class="plugin-header-item">{{ plugin.__pluginname__ }}</h4>
+        <button class="plugin-header-item" onclick="showPluginSettings('{{ plugin.id }}')">settings</button>
+        <button class="plugin-header-item" onclick="removePlugin('{{ plugin.id }}')">remove</button>
+    </div>
+    <div class="plugin-content">
+        {{ plugin.render_small() | safe }}
+    </div>
+</div>
+{% endmacro %}

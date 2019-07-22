@@ -1,0 +1,29 @@
+{
+    "mode": "single",
+    "debug": true,
+    "db": {
+        "database": "sqlite",
+        "connection": "debug.db"
+    },
+    "logging": {
+        "loggers": [
+            {
+                "type": "file",
+                "enabled": true,
+                "output": "debug.log",
+                "level": 0
+            }
+        ]
+    },
+    "plugins": {
+        "directory": "/home/acidbishop/code/aggregator/ext",
+        "use_whitelist": true,
+        "whitelist": [
+            "dummy"
+        ],
+        "blacklist": []
+    },
+    "admin": {
+        "enabled": true
+    }
+}

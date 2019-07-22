@@ -1,0 +1,18 @@
+{
+    "mode": "single",
+    "debug": false,
+    "db": {
+        "database": "sqlite",
+        "connection": "~/.local/share/aggregator/local.db"
+    },
+    "logging": {
+        "loggers": [
+            {
+                "type": "file",
+                "enabled": true,
+                "output": "~/.local/share/aggregator/local.log",
+                "level": 30
+            }
+        ]
+    }
+}
