@@ -3,8 +3,10 @@ from server.single.database import database
 from aggregator.register import register
 from server.single.database import PluginModel, UserModel
 from server.single.admin import admin_panel
+from utils.log import get_logger
 
 
+log = get_logger('server')
 single_user_server = Blueprint('single_user', __name__)
 plugins = []
 for plugin in PluginModel.select():
@@ -15,7 +17,7 @@ for plugin in PluginModel.select():
 def index():
     plugins = register.list_plugins()
     models = list(PluginModel.select())
-    views = [[register[m.plugin](m.id, m.params, m.data) for m in models]]
+    views = [[register[m.plugin](m.id, m.size, m.params, m.data) for m in models]]
     layout = {
         'rows': len(views),
         'cols': len(views[0]),
@@ -28,7 +30,8 @@ def index():
 def add_plugin(plugin):
     if plugin in register:
         user, _ = UserModel.get_or_create(username='user')
-        view = PluginModel(plugin=plugin, user=user, col=0, row=0, height=1, width=1)
+        size = register[plugin].__sizes__[0]
+        view = PluginModel(plugin=plugin, user=user, size=size)
         view.save()
         return '', 200
     return '', 400
@@ -45,6 +48,7 @@ def remove_plugin(id):
 
 @single_user_server.route('/save-param/<int:plugin_id>/<param_name>/<path:value>', methods=['POST'])
 def save_param(plugin_id, param_name, value):
+    log.debug(f'Save value: {value}')
     plugin = PluginModel.get_or_none(id=plugin_id)
     if plugin and plugin.plugin in register:
         schema = register[plugin.plugin].__paramschema__
@@ -57,4 +61,16 @@ def save_param(plugin_id, param_name, value):
                 plugin.params = params
                 plugin.save()
                 return '', 200
+    return '', 400
+
+
+@single_user_server.route('/save-size/<int:plugin_id>/<int:size>', methods=['POST'])
+def save_size(plugin_id, size):
+    plugin = PluginModel.get_or_none(id=plugin_id)
+    if plugin and plugin.plugin in register:
+        sizes = register[plugin.plugin].__sizes__
+        if size in sizes:
+            plugin.size = size
+            plugin.save()
+            return '', 200
     return '', 400

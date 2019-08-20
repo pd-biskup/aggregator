@@ -29,6 +29,7 @@ class PluginModel(sql.Model):
     id = sql.PrimaryKeyField()
     user = sql.ForeignKeyField(UserModel, 'id', 'plugins')
     plugin = sql.TextField(null=False)
+    size = sql.IntegerField(null=False)
     params = JSONField(null=False, default={})
     data = JSONField(null=False, default={})
 

@@ -8,6 +8,7 @@ _logger:Optional[logging.Logger] = None
 
 
 def get_logger(name:str) -> logging.Logger:
+    """Return logger with given name."""
     global _logger
     if not _logger:
         _logger = logging.getLogger()

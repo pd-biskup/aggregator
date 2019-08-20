@@ -38,6 +38,14 @@ function showPluginSettings(plugin) {
     item.style.visibility = "visible"
 }
 
+function showPluginSize(plugin) {
+    let item = document.getElementById(`plugin-size-${plugin}`)
+    let box = document.getElementById(`plugin-${plugin}`).getElementsByClassName('plugin-header')[0].getBoundingClientRect()
+    item.style.top = box.bottom + window.scrollY + 'px'
+    item.style.left = box.left + window.scrollX + 'px'
+    item.style.visibility = 'visible'
+}
+
 function saveParam(plugin, param) {
     let xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
@@ -52,8 +60,21 @@ function saveParam(plugin, param) {
     if (input.type == "checkbox") {
         value = input.checked
     } else {
-        value = input.value
+        value = encodeURIComponent(input.value)
+        console.log(value);
     }
-    xhr.open("POST", `${window.location.href}save-param/${plugin}/${param}/${value}` , true)
+    xhr.open("POST", `${window.location.href}save-param/${plugin}/${param}/${value}`, true)
+    xhr.send()
+}
+
+function saveSize(plugin, size) {
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function () {
+        if (this.readyState != 4) return
+        if (this.status == 200) {
+            document.location.reload(true)
+        }
+    }
+    xhr.open("POST", `${window.location.href}save-size/${plugin}/${size}`, true)
     xhr.send()
 }

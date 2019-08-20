@@ -12,7 +12,7 @@ setup(
     description='Pluggable content aggregator.',
     long_description=description,
     long_description_content_type='text/markdown',
-    url='https://github.com/acidbishop/aggregator',
+    url='https://github.com/pd-biskup/aggregator',
     packages=find_packages(),
     classifiers=[
         'Programming Language :: Python :: 3',

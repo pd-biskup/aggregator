@@ -92,11 +92,36 @@
 </div>
 {% endmacro %}
 
+{% macro build_plugin_size(plugin) %}
+<div id="plugin-size-{{ plugin.id }}" class="plugin-size floating">
+    <table>
+        {% for size in plugin.__sizes__ %}
+        <tr>
+            {% if size == 1 %}
+                <button onclick="saveSize('{{ plugin.id }}', 1)">Small</button>
+            {% elif size == 2 %}
+                <button onclick="saveSize('{{ plugin.id }}', 2)">Wide</button>
+            {% elif size == 3 %}
+                <button onclick="saveSize('{{ plugin.id }}', 3)">Tall</button>
+            {% elif size == 4 %}
+                <button onclick="saveSize('{{ plugin.id }}', 4)">Big</button>
+            {% elif size == 5 %}
+                <button onclick="saveSize('{{ plugin.id }}', 5)">Full</button>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endmacro %}
+
 {% macro build_plugin(plugin) %}
-<div id="plugin-{{ plugin.id }}" class="plugin plugin-small">
+<div id="plugin-{{ plugin.id }}" class="plugin plugin-size-{{ plugin.size }}">
     <div class="plugin-header">
         <h4 class="plugin-header-item">{{ plugin.__pluginname__ }}</h4>
         <button class="plugin-header-item" onclick="showPluginSettings('{{ plugin.id }}')">settings</button>
+        {% if plugin.__sizes__|length > 1 %}
+        <button class="plugin-header-item" onclick="showPluginSize('{{ plugin.id }}')">size</button>
+        {% endif %}
         <button class="plugin-header-item" onclick="removePlugin('{{ plugin.id }}')">remove</button>
     </div>
     <div class="plugin-content">

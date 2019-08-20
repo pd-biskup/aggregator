@@ -11,11 +11,13 @@ log = get_logger('register')
 
 
 class PluginRegister:
+    """Register holding available plugins."""
 
     def __init__(self) -> None:
         self._store:Dict[str, Type[Plugin]] = {}
     
     def register(self, plugin:Type[Plugin]) -> None:
+        """Add plugin to register."""
         if plugin.__pluginname__ not in self._store:
             self._store[plugin.__pluginname__] = plugin
             log.debug(f'Registered plugin {plugin.__pluginname__}.')
@@ -23,6 +25,7 @@ class PluginRegister:
             log.warning(f'Trying to register plugin with identical name: {plugin.__pluginname__}.')
 
     def list_plugins(self) -> KeysView:
+        """Return list of names of available plugins."""
        return self._store.keys()
 
     def __getitem__(self, key:str) -> Type[Plugin]:
@@ -36,6 +39,7 @@ class PluginRegister:
 
 
 def find_plugins(register):
+    """Scan plugins directory and add all to the register."""
     path = pathlib.Path(config['plugins']['directory'])
     log.debug(f'Looking for plugins in {path}')
     if path.exists() and path.is_dir():

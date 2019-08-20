@@ -3,8 +3,19 @@ import json
 
 
 class Config:
+    """Dictionary with dynamic schema designed to hold configuration."""
 
     def __init__(self, name:str, locked:bool=False, static:bool=False) -> None:
+        """
+        Parameters
+        ----------
+        name : str
+            Config name. Becomes key if Config is nested in another Config.
+        locked : bool
+            Initial lock state. Locked Config can't be edited until unlocked.
+        static : bool
+            Static Config can't be edited or unlocked.
+        """
         self.name = name
         self._dict:Dict[str, Any] = {}
         self._locked = locked
@@ -26,22 +37,27 @@ class Config:
                     self._dict[key] = value
     
     def register(self, config:Union['ConfigItem', 'Config']) -> None:
+        """Add new element to schema."""
         if not self._static:
             if not self._locked:
                 if config.name not in self._dict:
                     self._dict[config.name] = config
 
     def lock(self) -> None:
+        """Lock config. Any changes to locked config are impossible."""
         self._locked = True
     
     def unlock(self) -> None:
+        """Unlock locked config."""
         self._locked = False
     
+    # TODO
     def merge(self, config:'Config', replace:bool=True) -> None:
         raise NotImplementedError
 
     @classmethod
     def from_dict(cls, name:str, config:dict, locked:bool=False, static:bool=False) -> 'Config':
+        """Return new config with content from dict."""
         new_dict:Dict[str, Union['Config', 'ConfigItem']] = {}
         for k, v in config.items():
             if isinstance(v, dict):
@@ -53,6 +69,7 @@ class Config:
         return new_config
 
     def to_dict(self) -> dict:
+        """Return dict with content of config"""
         d = {}
         for k, v in self._dict.items():
             if hasattr(v, 'value'):

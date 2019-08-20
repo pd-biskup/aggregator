@@ -1,7 +1,7 @@
 from urllib.request import urlopen, URLError
 from bs4 import BeautifulSoup
 from soupsieve import SelectorSyntaxError
-from aggregator.plugin import Plugin, StringParam
+from aggregator.plugin import Plugin, StringParam, PluginSize
 
 
 class FramePlugin(Plugin):
@@ -12,6 +12,7 @@ class FramePlugin(Plugin):
         StringParam('url', 'Address of page.'),
         StringParam('selector', 'CSS selector.')
     )
+    __sizes__ = (PluginSize.SMALL, PluginSize.TALL, PluginSize.WIDE, PluginSize.BIG)
 
     def get_payload(self):
         payload = {'html': ''}

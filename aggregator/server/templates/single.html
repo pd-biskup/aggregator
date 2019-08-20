@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "plugin.html" import build_param_str, build_plugin_settings, build_plugin %}
+{% from "plugin.html" import build_param_str, build_plugin_settings, build_plugin, build_plugin_size %}
 
 {% block head %}
 {{ super() }}
@@ -44,6 +44,7 @@
     {% for col in range(layout.cols) %}
         {% if layout.templates[row][col] %}
             {{ build_plugin_settings(layout.templates[row][col]) }}
+            {{ build_plugin_size(layout.templates[row][col]) }}
         {% endif %}
     {% endfor %}
 {% endfor %}
